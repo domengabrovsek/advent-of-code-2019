@@ -1,0 +1,25 @@
+{
+  "name": "advent-of-code-2019",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "test-debug": "mocha debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/domengabrovsek/advent-of-code-2019.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/domengabrovsek/advent-of-code-2019/issues"
+  },
+  "homepage": "https://github.com/domengabrovsek/advent-of-code-2019#readme",
+  "dependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0"
+  }
+}
