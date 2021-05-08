@@ -5,7 +5,10 @@ const {
   calculateIntersectionPoints,
   calculateDistanceFromCenter,
   calculateClosestIntersectionDistance,
-  calculateLines
+  calculateLines,
+  findLinesOfIntersection,
+  findDistanceToClosestIntersectionBySteps,
+  calculatePointDistance
 } = require('../day-3/index');
 
 const { readFile } = require('../helpers/helpers');
@@ -31,6 +34,26 @@ describe('day-3 tests', () => {
 
       })
     })
+  })
+
+  describe('calculate distance between points', () => {
+
+    const testCases = [
+      { a: { x: 1, y: 1 }, b: { x: 1, y: 1 }, expectedResult: 0 },
+      { a: { x: 0, y: 0 }, b: { x: 8, y: 0 }, expectedResult: 8 },
+      { a: { x: 8, y: 5 }, b: { x: 6, y: 5 }, expectedResult: 2 },
+      { a: { x: 6, y: 5 }, b: { x: 8, y: 5 }, expectedResult: 2 },
+      { a: { x: 3, y: 3 }, b: { x: 6, y: 3 }, expectedResult: 3 },
+    ]
+
+    testCases.forEach(tc => {
+      it(`distance`, () => {
+        const result = calculatePointDistance(tc.a, tc.b);
+
+        expect(result).to.be.equal(tc.expectedResult)
+      })
+    })
+
   })
 
   describe('calculate distance from center', () => {
@@ -78,7 +101,6 @@ describe('day-3 tests', () => {
         input: input,
         expectedResult: 266
       }
-
     ]
 
     testCases.forEach(tc => {
@@ -123,4 +145,61 @@ describe('day-3 tests', () => {
     })
   })
 
+  describe('find line of intersection', () => {
+
+    const testCases = [
+      {
+        input: [["R8", "U5", "L5", "D3"], ["U7", "R6", "D4", "L4"]], point: { x: 3, y: 3 },
+        expectedResult: [{ x1: 3, y1: 5, x2: 3, y2: 2 }, { x1: 6, y1: 3, x2: 2, y2: 3 }]
+      }
+    ]
+
+    testCases.forEach(tc => {
+      const { x, y } = tc.point;
+
+      it(`point ${x, y} is on lines: TODO} `, () => {
+        const result = findLinesOfIntersection(tc.input, tc.point)
+        expect(result.map(x => x.line)).to.deep.have.members(tc.expectedResult)
+      })
+    })
+  })
+
+  describe('findDistanceToClosestIntersectionBySteps', () => {
+
+    const testCases = [
+      {
+        input: [["R8", "U5", "L5", "D3"], ["U7", "R6", "D4", "L4"]],
+        expectedResult: 30
+      },
+      {
+        input: [["R8", "U5", "L5", "D3", "R2", "U1", "L5"], ["U7", "R6", "D4", "L4"]],
+        expectedResult: 30
+      },
+      {
+        input: [
+          ["R75", "D30", "R83", "U83", "L12", "D49", "R71", "U7", "L72"],
+          ["U62", "R66", "U55", "R34", "D71", "R55", "D58", "R83"]
+        ],
+        expectedResult: 610
+      },
+      {
+        input: [
+          ["R98", "U47", "R26", "D63", "R33", "U87", "L62", "D20", "R33", "U53", "R51"],
+          ["U98", "R91", "D20", "R16", "D67", "R40", "U7", "R15", "U6", "R7"]
+        ],
+        expectedResult: 410
+      },
+      {
+        input: input,
+        expectedResult: 19242 // 19686 is too high, 532 too low, 19242 is correct
+      }
+    ]
+
+    testCases.forEach(tc => {
+      it(`closest intersection should have distance: ${tc.expectedResult}`, () => {
+        const result = findDistanceToClosestIntersectionBySteps(tc.input);
+        expect(result).to.be.equal(tc.expectedResult);
+      })
+    })
+  })
 });

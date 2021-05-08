@@ -75,6 +75,79 @@ const calculateIntersection = (firstLine, secondLine) => {
   return { x, y };
 }
 
+const findLinesOfIntersection = (wires, point) => {
+
+  const result = [];
+
+  wires.forEach((wire, wireIndex) => {
+    const lines = calculateLines(wire);
+
+    for (let [index, line] of lines.entries()) {
+      let dxc = point.x - line.x1;
+      let dyc = point.y - line.y1;
+
+      let dxl = line.x2 - line.x1;
+      let dyl = line.y2 - line.y1;
+
+      const cross = dxc * dyl - dyc * dxl;
+
+      if (cross === 0) {
+
+        if (result.find(x => x.wireIndex === wireIndex)) {
+          result.pop();
+        }
+
+        let distance = 0;
+
+        // save distance from previous lines
+        for (let i = 0; i < index; i++) {
+          // 'R8' -> 8, 'D123' -> 123
+          const stepDistance = parseInt(wire[i].slice(1, wire[i].length));
+          distance += stepDistance;
+        }
+
+        result.push({
+          line: line,
+          distance: distance,
+          wireIndex: wireIndex
+        });
+      }
+    }
+  })
+
+  return result;
+}
+
+const findDistanceToClosestIntersectionBySteps = (wires) => {
+
+  const interceptions = calculateIntersectionPoints(wires);
+  const distances = [];
+
+  interceptions.forEach(interception => {
+
+    // those are the lines on which the point of interception is
+    const linesOfInterception = findLinesOfIntersection(wires, interception);
+
+    let totalDistance = 0;
+
+    // go through each line and find all the previous lines to calculate distance
+    linesOfInterception.forEach(line => {
+
+      const a = { x: line.line.x1, y: line.line.y1 };
+      const b = interception;
+
+      const totalLineDistance = line.distance + calculatePointDistance(a, b);
+
+      totalDistance += totalLineDistance;
+    })
+
+    distances.push(totalDistance);
+  })
+
+  return Math.min(...distances);
+
+}
+
 const calculateIntersectionPoints = (wires) => {
 
   const [firstWire, secondWire] = wires;
@@ -87,7 +160,7 @@ const calculateIntersectionPoints = (wires) => {
   firstWireLines.forEach(fl => {
     secondWireLines.forEach(sl => {
 
-      const intersection = calculateIntersection(fl, sl)
+      const intersection = calculateIntersection(fl, sl);
 
       if (intersection) {
         intersections.push(intersection);
@@ -101,6 +174,8 @@ const calculateIntersectionPoints = (wires) => {
 const calculateDistanceFromCenter = (point) =>
   Math.abs(point.x) + Math.abs(point.y);
 
+const calculatePointDistance = (a, b) => Math.abs((a.x + a.y) - (b.x + b.y));
+
 const calculateClosestIntersectionDistance = (intersections) =>
   Math.min(...intersections.map(intersection => calculateDistanceFromCenter(intersection)));
 
@@ -108,5 +183,8 @@ module.exports = {
   calculateIntersectionPoints,
   calculateDistanceFromCenter,
   calculateClosestIntersectionDistance,
-  calculateLines
+  calculateLines,
+  findLinesOfIntersection,
+  findDistanceToClosestIntersectionBySteps,
+  calculatePointDistance
 }
