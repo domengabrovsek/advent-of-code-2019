@@ -2,7 +2,6 @@
 const path = require('path');
 const { expect } = require('chai');
 const {
-  calculatePoints,
   calculateIntersectionPoints,
   calculateDistanceFromCenter,
   calculateClosestIntersectionDistance,
@@ -13,51 +12,6 @@ const { readFile } = require('../helpers/helpers');
 const input = readFile(path.join(__dirname, '../', 'day-3', 'input.txt')).map(line => line.split(','));
 
 describe('day-3 tests', () => {
-
-  describe('calculate all points on wire', () => {
-    const testCases = [
-      {
-        input: ["R8", "U5", "L5", "D3"], expectedResult: [
-          { x: 0, y: 0 }, { x: 1, y: 0 },
-          { x: 2, y: 0 }, { x: 3, y: 0 },
-          { x: 4, y: 0 }, { x: 5, y: 0 },
-          { x: 6, y: 0 }, { x: 7, y: 0 },
-          { x: 8, y: 0 }, { x: 8, y: 1 },
-          { x: 8, y: 2 }, { x: 8, y: 3 },
-          { x: 8, y: 4 }, { x: 8, y: 5 },
-          { x: 7, y: 5 }, { x: 6, y: 5 },
-          { x: 5, y: 5 }, { x: 4, y: 5 },
-          { x: 3, y: 5 }, { x: 3, y: 4 },
-          { x: 3, y: 3 }, { x: 3, y: 2 }
-        ]
-      },
-      {
-        input: ["U7", "R6", "D4", "L4"], expectedResult: [
-          { x: 0, y: 0 }, { x: 0, y: 1 },
-          { x: 0, y: 2 }, { x: 0, y: 3 },
-          { x: 0, y: 4 }, { x: 0, y: 5 },
-          { x: 0, y: 6 }, { x: 0, y: 7 },
-          { x: 1, y: 7 }, { x: 2, y: 7 },
-          { x: 3, y: 7 }, { x: 4, y: 7 },
-          { x: 5, y: 7 }, { x: 6, y: 7 },
-          { x: 6, y: 6 }, { x: 6, y: 5 },
-          { x: 6, y: 4 }, { x: 6, y: 3 },
-          { x: 5, y: 3 }, { x: 4, y: 3 },
-          { x: 3, y: 3 }, { x: 2, y: 3 }
-        ]
-      }
-    ]
-
-    testCases.forEach(tc => {
-      it(`wire: ${tc.input}`, () => {
-
-        const result = calculatePoints(tc.input);
-
-        expect(result).to.be.deep.equal(tc.expectedResult)
-
-      })
-    })
-  })
 
   describe('calculate all intersections on wires', () => {
 
@@ -120,10 +74,10 @@ describe('day-3 tests', () => {
         ],
         expectedResult: 135
       },
-      // {
-      //   input: input,
-      //   expectedResult: 266
-      // }
+      {
+        input: input,
+        expectedResult: 266
+      }
 
     ]
 
@@ -143,18 +97,18 @@ describe('day-3 tests', () => {
     const testCases = [
       {
         input: ["R8", "U5", "L5", "D3"], expectedResult: [
-          { a: { x: 0, y: 0 }, b: { x: 8, y: 0 } },
-          { a: { x: 8, y: 0 }, b: { x: 8, y: 5 } },
-          { a: { x: 8, y: 5 }, b: { x: 3, y: 5 } },
-          { a: { x: 3, y: 5 }, b: { x: 3, y: 2 } }
+          { x1: 0, y1: 0, x2: 8, y2: 0 },
+          { x1: 8, y1: 0, x2: 8, y2: 5 },
+          { x1: 8, y1: 5, x2: 3, y2: 5 },
+          { x1: 3, y1: 5, x2: 3, y2: 2 }
         ]
       },
       {
         input: ["U7", "R6", "D4", "L4"], expectedResult: [
-          { a: { x: 0, y: 0 }, b: { x: 0, y: 7 } },
-          { a: { x: 0, y: 7 }, b: { x: 6, y: 7 } },
-          { a: { x: 6, y: 7 }, b: { x: 6, y: 3 } },
-          { a: { x: 6, y: 3 }, b: { x: 2, y: 3 } }
+          { x1: 0, y1: 0, x2: 0, y2: 7 },
+          { x1: 0, y1: 7, x2: 6, y2: 7 },
+          { x1: 6, y1: 7, x2: 6, y2: 3 },
+          { x1: 6, y1: 3, x2: 2, y2: 3 }
         ]
       }
     ]
