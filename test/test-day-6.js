@@ -1,6 +1,6 @@
 const path = require('path');
 const { expect } = require('chai')
-const { DFS, constructGraph, sumSteps, findStartingNode } = require('../day-6/index');
+const { DFS, constructGraph, sumSteps, constructUniqueOrbits } = require('../day-6/index');
 const { readFile } = require('../helpers/helpers');
 
 describe.only('day-4 tests', () => {
@@ -8,7 +8,7 @@ describe.only('day-4 tests', () => {
   describe.only('find starting node tests', () => {
 
     const testCases = [
-      { inputFile: 'test-input.txt', expectedResult: 'COM' },
+      { inputFile: 'test-input.txt', expectedResult: 12 },
       { inputFile: 'input.txt', expectedResult: 'COM' },
     ]
 
@@ -16,9 +16,9 @@ describe.only('day-4 tests', () => {
       it(`starting node for ${tc.inputFile} should be ${tc.expectedResult}`, () => {
         const input = readFile(path.join(__dirname, '../', 'day-6', tc.inputFile));
 
-        const startingNode = findStartingNode(input);
+        const uniques = constructUniqueOrbits(input);
 
-        expect(startingNode).to.be.equal(tc.expectedResult);
+        expect(uniques.size).to.be.equal(tc.expectedResult);
 
       })
     })
